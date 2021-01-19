@@ -5,7 +5,7 @@ import { ArrowForwardIcon, PhoneIcon } from '@chakra-ui/icons';
 import styles from './Item.module.scss';
 
 const Item = ({ data }) => {
-	console.log(data);
+	// console.log(data);
 
 	const encodedGoogleMapsUrl = `https://www.google.com/maps/place/${encodeURIComponent(
 		data.plusCode,
