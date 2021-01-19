@@ -2,6 +2,7 @@ import axios from 'axios';
 import React, { useCallback, useEffect, useState } from 'react';
 import { Button, Menu, MenuButton, MenuList, MenuItem } from '@chakra-ui/react';
 import { ChevronDownIcon } from '@chakra-ui/icons';
+import dayjs from 'dayjs';
 import Item from './item';
 import LoadingSpinner from '../loading-spinner';
 import styles from './DeliveriesList.module.scss';
@@ -20,6 +21,28 @@ const Region = {
 	South: 'South',
 };
 
+const Day = {
+	Tuesday: 'Tuesday',
+	Thursday: 'Thursday',
+	Sunday: 'Sunday',
+};
+
+const getNextDay = () => {
+	const today = dayjs().day();
+	switch (today) {
+		case 1:
+		case 2:
+			return Day.Tuesday;
+		case 3:
+		case 4:
+			return Day.Thursday;
+		case 5:
+		case 6:
+		case 7:
+			return Day.Sunday;
+	}
+};
+
 const getSheetData = async (sheetId) => {
 	try {
 		return await axios.get(`/api/getSheetData/${sheetId}`);
@@ -33,14 +56,18 @@ const DeliveriesList = () => {
 	const [data, setData] = useState();
 	const [isLoading, setIsLoading] = useState(true);
 	const [region, setRegion] = useState(Region.East);
+	const nextDay = getNextDay();
 
 	useEffect(() => {
 		setIsLoading(true);
 		getSheetData(RegionSheetCode[region]).then((sheetData) => {
-			setData(sheetData?.data?.rows);
+			const cleanData = sheetData?.data?.rows
+				.filter((row) => row.deliveries[nextDay] > 0)
+				.sort((a, b) => a.optimalRoute > b.optimalRoute);
+			setData(cleanData);
 			setIsLoading(false);
 		});
-	}, [region]);
+	}, [nextDay, region]);
 
 	const handleRegionChange = useCallback((event) => {
 		setRegion(event.target.value);
@@ -68,7 +95,10 @@ const DeliveriesList = () => {
 			</Menu>
 			<ul className={styles.list}>
 				{data.map((item) => {
-					return <Item data={item} key={item.id} />;
+					const portions = item.deliveries[nextDay];
+					return (
+						<Item data={item} portions={portions} key={item.id} />
+					);
 				})}
 			</ul>
 		</div>

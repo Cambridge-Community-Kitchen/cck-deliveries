@@ -23,23 +23,21 @@ export default async (req, res) => {
 
 		const data = rows
 			.filter((row) => row.Name && row.Name.length > 0)
-			.map((row) => {
-				return {
-					id: row._rowNumber,
-					name: row.Name,
-					phone: row.Phone,
-					address: row.Address,
-					plusCode: row.PlusCode,
-					allergies: row['Allergies?'],
-					deliveries: {
-						tue: row.Tue,
-						thu: row.Thur,
-						sun: row.Sun,
-					},
-					notes: row.Notes,
-					optimalRoute: row['optimal route'],
-				};
-			});
+			.map((row) => ({
+				id: row._rowNumber,
+				name: row.Name,
+				phone: row.Phone,
+				address: row.Address,
+				plusCode: row.PlusCode,
+				allergies: row['Allergies?'],
+				deliveries: {
+					Tuesday: row.Tue,
+					Thursday: row.Thur,
+					Sunday: row.Sun,
+				},
+				notes: row.Notes,
+				optimalRoute: parseInt(row['optimal route']),
+			}));
 
 		res.status(200).json({ rows: data });
 	} catch (e) {
