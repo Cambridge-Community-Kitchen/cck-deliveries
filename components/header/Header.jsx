@@ -10,7 +10,7 @@ const Header = () => {
 				alignItems="center"
 				justifyContent="center"
 				mx="4"
-				my="4"
+				my="6"
 			>
 				<Image src="/logo.png" height={50} width={50} />
 				<Heading ml={2}>CCK Deliveries</Heading>

@@ -1,18 +1,17 @@
 import React, { memo } from 'react';
 import PropTypes from 'prop-types';
-import { Box, Button, Divider, Stack, Text } from '@chakra-ui/react';
+import { Badge, Box, Button, Divider, Stack, Text } from '@chakra-ui/react';
 import { ArrowForwardIcon, PhoneIcon } from '@chakra-ui/icons';
 import styles from './Item.module.scss';
 
 const Item = ({ data, portions }) => {
-	console.log(data);
+	// console.log(data);
 
 	const encodedGoogleMapsUrl = `https://www.google.com/maps/place/${encodeURIComponent(
 		data.plusCode,
 	)}`;
 
-	const portionsString =
-		portions > 1 ? `${portions} portions` : `${portions} portion`;
+	const portionsString = portions > 1 ? `portions` : `portion`;
 
 	return (
 		<>
@@ -31,7 +30,18 @@ const Item = ({ data, portions }) => {
 						</Text>
 					</Box>
 					<Text color="gray.500">{data.address}</Text>
-					<Text color="gray.500">{portionsString}</Text>
+					<Box d="flex" alignItems="baseline">
+						<Badge
+							colorScheme="green"
+							fontSize={14}
+							variant="solid"
+						>
+							{portions}
+						</Badge>
+						<Text color="gray.500" ml={1}>
+							{portionsString}
+						</Text>
+					</Box>
 					<Text color="gray.500" fontSize="sm">
 						{data.notes}
 					</Text>
