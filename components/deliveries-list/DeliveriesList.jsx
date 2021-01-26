@@ -1,7 +1,7 @@
 import axios from 'axios';
 import PropTypes from 'prop-types';
 import React, { useEffect, useState } from 'react';
-import { Box, Text } from '@chakra-ui/react';
+import { Box, Button, Text } from '@chakra-ui/react';
 import dayjs from 'dayjs';
 import Item from './item';
 import LoadingSpinner from '../loading-spinner';
@@ -43,7 +43,7 @@ const getSheetData = async (sheetId) => {
 	}
 };
 
-const DeliveriesList = ({ region }) => {
+const DeliveriesList = ({ onReset, region }) => {
 	const [data, setData] = useState();
 	const [isLoading, setIsLoading] = useState(true);
 	const { day: nextDay, date } = getNextDay();
@@ -63,15 +63,26 @@ const DeliveriesList = ({ region }) => {
 
 	return (
 		<div className={styles.root}>
-			<Box d="flex" ml={2} mr={2}>
-				<Text>Deliveries for </Text>
-				<Text fontWeight={700} ml={1}>
-					{date.format('DD/MM/YYYY')}
-				</Text>
-				<Text>&nbsp;in </Text>
-				<Text fontWeight={700} ml={1}>
-					{region}
-				</Text>
+			<Box d="flex" justifyContent="space-between">
+				<Box d="flex" ml={2} mr={2}>
+					<Text>Deliveries for </Text>
+					<Text fontWeight={700} ml={1}>
+						{date.format('DD/MM/YYYY')}
+					</Text>
+					<Text>&nbsp;in </Text>
+					<Text fontWeight={700} ml={1}>
+						{region}
+					</Text>
+				</Box>
+				<Button
+					colorScheme="grey"
+					mr={2}
+					onClick={onReset}
+					size="sm"
+					variant="outline"
+				>
+					Reset
+				</Button>
 			</Box>
 			<ul className={styles.list}>
 				{data.map((item) => {
@@ -86,6 +97,7 @@ const DeliveriesList = ({ region }) => {
 };
 
 DeliveriesList.propTypes = {
+	onReset: PropTypes.func.isRequired,
 	region: PropTypes.string.isRequired,
 };
 

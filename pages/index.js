@@ -2,6 +2,7 @@ import axios from 'axios';
 import { useCallback, useEffect, useState } from 'react';
 import Head from 'next/head';
 import { useDisclosure } from '@chakra-ui/react';
+import useLocalStorage from '../hooks/useLocalStorage.jsx';
 import DeliveriesList from '../components/deliveries-list';
 import Header from '../components/header';
 import Authorization from '../components/authorization';
@@ -26,34 +27,68 @@ const getAuthInfo = async () => {
 
 export default function Home() {
 	const [isAuthorized, setIsAuthorized] = useState(false);
+	const [isLoading, setIsLoading] = useState(false);
 	const [passwords, setPasswords] = useState();
+	const [currentPassword, setCurrentPassword] = useLocalStorage('pw');
 	const [region, setRegion] = useState(Region.East);
-	const [currentPassword, setCurrentPassword] = useState('');
 	const { isOpen, onOpen, onClose } = useDisclosure();
 
-	console.log(passwords);
-
-	useEffect(() => {
-		if (!isAuthorized) {
-			onOpen();
-		}
-		getAuthInfo().then((response) => {
-			setPasswords(response.data.pwds);
-		});
-	}, [isAuthorized, onOpen]);
-
-	const onPasswordComplete = useCallback(
+	const verifyPassword = useCallback(
 		(value) => {
+			let isPasswordCorrect = false;
 			Object.keys(passwords).map((key) => {
 				if (key.toLowerCase() === value.toLowerCase()) {
 					setIsAuthorized(true);
 					setRegion(passwords[key]);
 					onClose();
+					isPasswordCorrect = true;
 				}
 			});
+
+			if (!isPasswordCorrect) {
+				setCurrentPassword('');
+			}
 		},
-		[onClose, passwords],
+		[onClose, passwords, setCurrentPassword],
 	);
+
+	useEffect(() => {
+		if (!isAuthorized) {
+			onOpen();
+		}
+		if (!passwords) {
+			setIsLoading(true);
+			getAuthInfo().then((response) => {
+				setPasswords(response?.data?.pwds);
+				setIsLoading(false);
+			});
+		}
+	}, [currentPassword, isAuthorized, onOpen, passwords, verifyPassword]);
+
+	useEffect(() => {
+		if (currentPassword?.length === 4 && passwords) {
+			verifyPassword(currentPassword);
+		}
+	}, [currentPassword, passwords, verifyPassword]);
+
+	const onPasswordChange = useCallback(
+		(value) => {
+			setCurrentPassword(value);
+		},
+		[setCurrentPassword],
+	);
+
+	const onPasswordComplete = useCallback(
+		(value) => {
+			verifyPassword(value);
+		},
+		[verifyPassword],
+	);
+
+	const onReset = useCallback(() => {
+		setCurrentPassword('');
+		setIsAuthorized(false);
+	}, [setCurrentPassword]);
 
 	return (
 		<>
@@ -66,13 +101,17 @@ export default function Home() {
 				<Header />
 				{!isAuthorized && (
 					<Authorization
+						isLoading={isLoading}
 						isOpen={isOpen}
+						onChange={onPasswordChange}
 						onClose={onClose}
 						onComplete={onPasswordComplete}
 						value={currentPassword}
 					/>
 				)}
-				{isAuthorized && <DeliveriesList region={region} />}
+				{isAuthorized && (
+					<DeliveriesList onReset={onReset} region={region} />
+				)}
 			</main>
 		</>
 	);
