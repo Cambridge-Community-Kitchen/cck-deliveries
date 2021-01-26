@@ -45,6 +45,9 @@ const Item = ({ data, portions }) => {
 					<Text color="gray.500" fontSize="sm">
 						{data.notes}
 					</Text>
+					<Text color="red.500" fontSize="sm">
+						{data.allergies}
+					</Text>
 					<Stack direction="row" mt="4" spacing={3}>
 						<Button
 							as="a"
