@@ -51,6 +51,7 @@ const App = ({ Component, pageProps }) => (
 				content="https://yourdomain.com/static/icons/apple-touch-icon.png"
 			/> */}
 
+			<link rel="manifest" href="/manifest.json" />
 			<link
 				rel="apple-touch-icon"
 				sizes="57x57"
