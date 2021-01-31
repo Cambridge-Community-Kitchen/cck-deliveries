@@ -5,6 +5,7 @@ import { Box, Button, Text } from '@chakra-ui/react';
 import dayjs from 'dayjs';
 import Item from './item';
 import LoadingSpinner from '../loading-spinner';
+import BackToLockon from '../../components/back-to-lockon';
 import styles from './DeliveriesList.module.scss';
 import { RegionSheetCodes } from '../../config/constants';
 
@@ -92,6 +93,7 @@ const DeliveriesList = ({ onReset, region }) => {
 					);
 				})}
 			</ul>
+			<BackToLockon />
 		</div>
 	);
 };

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 import PropTypes from 'prop-types';
 import {
 	Modal,
@@ -89,7 +89,7 @@ Authorization.propTypes = {
 	onChange: PropTypes.func.isRequired,
 	onClose: PropTypes.func.isRequired,
 	onComplete: PropTypes.func.isRequired,
-	value: PropTypes.string.isRequired,
+	value: PropTypes.string,
 };
 
-export default Authorization;
+export default memo(Authorization);
