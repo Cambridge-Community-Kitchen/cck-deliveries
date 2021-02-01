@@ -5,7 +5,7 @@ const SPREADSHEET_ID = process.env.REACT_APP_SPREADSHEET_ID;
 const CLIENT_EMAIL = process.env.REACT_APP_GOOGLE_CLIENT_EMAIL;
 const PRIVATE_KEY = process.env.REACT_APP_GOOGLE_SERVICE_PRIVATE_KEY;
 
-const PW_CELL = 'L14';
+const PW_CELL = 'L18';
 
 export default async (req, res) => {
 	const doc = new GoogleSpreadsheet(SPREADSHEET_ID);
