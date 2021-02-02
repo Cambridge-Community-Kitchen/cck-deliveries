@@ -11,7 +11,8 @@ import styles from '../styles/Home.module.css';
 const Region = {
 	East: 'East',
 	Central: 'Central',
-	North: 'North',
+	North1: 'North 1',
+	North2: 'North 2',
 	South: 'South',
 	Trumpington: 'Trumpington',
 };
