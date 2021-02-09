@@ -1,17 +1,51 @@
 import React, { memo } from 'react';
 import PropTypes from 'prop-types';
-import { Badge, Box, Button, Divider, Stack, Text } from '@chakra-ui/react';
-import { ArrowForwardIcon, PhoneIcon } from '@chakra-ui/icons';
+import {
+	Badge,
+	Box,
+	Button,
+	Divider,
+	Spacer,
+	Stack,
+	Text,
+} from '@chakra-ui/react';
+import { ArrowForwardIcon, CheckIcon, PhoneIcon } from '@chakra-ui/icons';
 import styles from './Item.module.scss';
 
-const Item = ({ data, portions }) => {
-	// console.log(data);
-
+const Item = ({ data, markComplete, portions, unmarkComplete }) => {
 	const encodedGoogleMapsUrl = `https://www.google.com/maps/place/${encodeURIComponent(
 		data.plusCode,
 	)}`;
 
 	const portionsString = portions > 1 ? `portions` : `portion`;
+
+	if (data?.completed) {
+		return (
+			<>
+				<li className={styles.item}>
+					<Box ml="3" py="3">
+						<Box
+							d="flex"
+							alignItems="baseline"
+							justifyContent="space-between"
+						>
+							<Text fontSize="xl" fontWeight="bold">
+								{data.name}
+							</Text>
+							<Button
+								colorScheme="green"
+								mr={2}
+								onClick={unmarkComplete}
+							>
+								<CheckIcon h="5" w="5" />
+							</Button>
+						</Box>
+					</Box>
+				</li>
+				<Divider />
+			</>
+		);
+	}
 
 	return (
 		<>
@@ -48,6 +82,7 @@ const Item = ({ data, portions }) => {
 					<Text color="red.500" fontSize="sm">
 						{data.allergies}
 					</Text>
+
 					<Stack direction="row" mt="4" spacing={3}>
 						<Button
 							as="a"
@@ -68,6 +103,15 @@ const Item = ({ data, portions }) => {
 								Call
 							</Button>
 						)}
+						<Spacer />
+						<Button
+							colorScheme="green"
+							mr={2}
+							onClick={markComplete}
+							variant="outline"
+						>
+							<CheckIcon h="5" w="5" />
+						</Button>
 					</Stack>
 				</Box>
 			</li>
@@ -78,7 +122,9 @@ const Item = ({ data, portions }) => {
 
 Item.propTypes = {
 	data: PropTypes.object.isRequired,
+	markComplete: PropTypes.func.isRequired,
 	portions: PropTypes.string.isRequired,
+	unmarkComplete: PropTypes.func.isRequired,
 };
 
 export default memo(Item);

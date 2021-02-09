@@ -1,6 +1,6 @@
 import axios from 'axios';
 import PropTypes from 'prop-types';
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { Box, Button, Text } from '@chakra-ui/react';
 import dayjs from 'dayjs';
 import Item from './item';
@@ -60,7 +60,35 @@ const DeliveriesList = ({ onReset, region }) => {
 		});
 	}, [nextDay, region]);
 
+	const updateItemCompletion = useCallback(
+		(id, value) => {
+			const updatedItemIndex = data.findIndex((item) => item.id === id);
+			if (updatedItemIndex !== -1) {
+				setData([
+					...data.slice(0, updatedItemIndex),
+					Object.assign({}, data[updatedItemIndex], {
+						completed: value,
+					}),
+					...data.slice(updatedItemIndex + 1),
+				]);
+			}
+		},
+		[data],
+	);
+
+	const markItemComplete = useCallback(
+		(id) => updateItemCompletion(id, true),
+		[updateItemCompletion],
+	);
+
+	const unmarkItemComplete = useCallback(
+		(id) => updateItemCompletion(id, false),
+		[updateItemCompletion],
+	);
+
 	if (!data || isLoading) return <LoadingSpinner />;
+
+	console.log(data);
 
 	return (
 		<div className={styles.root}>
@@ -89,7 +117,13 @@ const DeliveriesList = ({ onReset, region }) => {
 				{data.map((item) => {
 					const portions = item.deliveries[nextDay];
 					return (
-						<Item data={item} portions={portions} key={item.id} />
+						<Item
+							data={item}
+							key={item.id}
+							markComplete={() => markItemComplete(item.id)}
+							portions={portions}
+							unmarkComplete={() => unmarkItemComplete(item.id)}
+						/>
 					);
 				})}
 			</ul>
