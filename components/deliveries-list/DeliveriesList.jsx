@@ -88,8 +88,6 @@ const DeliveriesList = ({ onReset, region }) => {
 
 	if (!data || isLoading) return <LoadingSpinner />;
 
-	console.log(data);
-
 	return (
 		<div className={styles.root}>
 			<Box d="flex" justifyContent="space-between">

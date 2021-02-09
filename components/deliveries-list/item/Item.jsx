@@ -29,7 +29,11 @@ const Item = ({ data, markComplete, portions, unmarkComplete }) => {
 							alignItems="baseline"
 							justifyContent="space-between"
 						>
-							<Text fontSize="xl" fontWeight="bold">
+							<Text
+								color="gray.400"
+								fontSize="xl"
+								fontWeight="bold"
+							>
 								{data.name}
 							</Text>
 							<Button
