@@ -31,7 +31,7 @@ const Authorization = ({
 			isCentered
 		>
 			<ModalOverlay />
-			<ModalContent>
+			<ModalContent mx={3}>
 				<ModalHeader>
 					{!isLoading && (
 						<Flex justify="center">
