@@ -15,6 +15,7 @@ const Region = {
 	North2: 'North 2',
 	South: 'South',
 	Trumpington: 'Trumpington',
+	Demo: 'Demo',
 };
 
 const getAuthInfo = async () => {
