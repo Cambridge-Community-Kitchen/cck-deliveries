@@ -12,6 +12,8 @@ export default async (req, res) => {
 		query: { sheetId },
 	} = req;
 
+	console.log('privateKey:', PRIVATE_KEY);
+
 	try {
 		await doc.useServiceAccountAuth({
 			client_email: CLIENT_EMAIL,
