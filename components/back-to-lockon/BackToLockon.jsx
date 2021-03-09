@@ -1,5 +1,6 @@
 import React from 'react';
 import { Box, Button } from '@chakra-ui/react';
+import { ArrowForwardIcon } from '@chakra-ui/icons';
 
 const BackToLockon = () => {
 	const encodedGoogleMapsUrl = `https://goo.gl/maps/TKn359eKxHWskMJV6`;
@@ -10,6 +11,7 @@ const BackToLockon = () => {
 				as="a"
 				href={encodedGoogleMapsUrl}
 				colorScheme="yellow"
+				rightIcon={<ArrowForwardIcon />}
 				size="sm"
 				target="_blank"
 			>
