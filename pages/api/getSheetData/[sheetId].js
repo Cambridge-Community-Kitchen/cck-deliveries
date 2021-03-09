@@ -12,8 +12,6 @@ export default async (req, res) => {
 		query: { sheetId },
 	} = req;
 
-	console.log('privateKey:', PRIVATE_KEY);
-
 	try {
 		await doc.useServiceAccountAuth({
 			client_email: CLIENT_EMAIL,
@@ -25,6 +23,7 @@ export default async (req, res) => {
 		const rows = await sheet.getRows();
 
 		const data = rows
+			.slice(0, 14)
 			.filter((row) => row.Name && row.Name.length > 0)
 			.map((row) => ({
 				id: row._rowNumber,
