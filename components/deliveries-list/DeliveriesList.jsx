@@ -7,7 +7,7 @@ import Item from './item';
 import LoadingSpinner from '../loading-spinner';
 import BackToLockon from '../../components/back-to-lockon';
 import styles from './DeliveriesList.module.scss';
-import { RegionSheetCodes } from '../../config/constants';
+import { SheetCodes } from '../../config/constants';
 
 const Day = {
 	Tuesday: 'Tuesday',
@@ -44,14 +44,25 @@ const getSheetData = async (sheetId) => {
 	}
 };
 
+const getDishOfTheDay = async () => {
+	try {
+		return await axios.get(`/api/getDishOfTheDay`);
+	} catch (e) {
+		// eslint-disable-next-line no-console
+		console.error(e);
+	}
+};
+
 const DeliveriesList = ({ onReset, region }) => {
 	const [data, setData] = useState();
+	const [dishOfTheDay, setDishOfTheDay] = useState();
+	const [displayDish, setDisplayDish] = useState(false);
 	const [isLoading, setIsLoading] = useState(true);
 	const { day: nextDay, date } = getNextDay();
 
 	useEffect(() => {
 		setIsLoading(true);
-		getSheetData(RegionSheetCodes[region]).then((sheetData) => {
+		getSheetData(SheetCodes[region]).then((sheetData) => {
 			const cleanData = sheetData?.data?.rows.filter(
 				(row) => row.deliveries[nextDay] > 0,
 			);
@@ -86,6 +97,34 @@ const DeliveriesList = ({ onReset, region }) => {
 		[updateItemCompletion],
 	);
 
+	useEffect(() => {
+		if (!dishOfTheDay) {
+			getDishOfTheDay().then((sheetData) => {
+				setDishOfTheDay(sheetData?.data?.rows[0]);
+			});
+		}
+	}, [dishOfTheDay]);
+
+	useEffect(() => {
+		if (dishOfTheDay) {
+			const { timestamp } = dishOfTheDay;
+
+			const today = new Date();
+			const parsed = new Date(timestamp);
+
+			// If timestamp is yesterday or today
+			if (
+				today.getDate() === parsed.getDate() ||
+				today.getDate() === parsed.getDate() + 1
+			) {
+				// Display dish of the day
+				setDisplayDish(true);
+			} else {
+				setDisplayDish(false);
+			}
+		}
+	}, [dishOfTheDay]);
+
 	if (!data || isLoading) return <LoadingSpinner />;
 
 	return (
@@ -111,6 +150,49 @@ const DeliveriesList = ({ onReset, region }) => {
 					Reset
 				</Button>
 			</Box>
+			{displayDish && (
+				<Box ml={2}>
+					<Box
+						alignItems="center"
+						display="flex"
+						justifyContent="flex-start"
+					>
+						<Text fontWeight="bold">Dish:</Text>
+						<Text fontSize={14} ml={1}>
+							{dishOfTheDay.dish}
+						</Text>
+					</Box>
+					<Box
+						alignItems="center"
+						display="flex"
+						justifyContent="flex-start"
+					>
+						<Text fontWeight="bold">Ingredients:</Text>
+						<Text fontSize={14} ml={1}>
+							{dishOfTheDay.ingredients}
+						</Text>
+					</Box>
+
+					<Box
+						alignItems="center"
+						display="flex"
+						justifyContent="flex-start"
+					>
+						<Text color="red.400" fontWeight="bold">
+							Allergens:
+						</Text>
+						{dishOfTheDay.allergens ? (
+							<Text fontSize={14} ml={1}>
+								{dishOfTheDay.allergens}
+							</Text>
+						) : (
+							<Text fontSize={14} ml={1}>
+								No allergens
+							</Text>
+						)}
+					</Box>
+				</Box>
+			)}
 			<ul className={styles.list}>
 				{data.map((item) => {
 					const portions = item.deliveries[nextDay];

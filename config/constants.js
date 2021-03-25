@@ -1,4 +1,4 @@
-export const RegionSheetCodes = {
+export const SheetCodes = {
 	East: '1505264217',
 	Central: '2130690733',
 	'North 1': '2147400358',
@@ -7,4 +7,5 @@ export const RegionSheetCodes = {
 	Trumpington: '271355350',
 	West: '855253552',
 	Demo: '1683354199',
+	DishOfTheDay: '169944562',
 };

@@ -7,8 +7,6 @@ const { privateKey: PRIVATE_KEY } = JSON.parse(
 	process.env.REACT_APP_GOOGLE_SERVICE_PRIVATE_KEY,
 );
 
-const PW_CELL = 'L18';
-
 export default async (req, res) => {
 	const doc = new GoogleSpreadsheet(SPREADSHEET_ID);
 
@@ -17,19 +15,19 @@ export default async (req, res) => {
 			client_email: CLIENT_EMAIL,
 			private_key: PRIVATE_KEY,
 		});
-
+		// loads document properties and worksheets
 		await doc.loadInfo();
-		const pwds = {};
-		for (const key in SheetCodes) {
-			if (key === 'DishOfTheDay') continue;
+		const sheet = doc.sheetsById[SheetCodes.DishOfTheDay];
+		const rows = await sheet.getRows();
 
-			const sheet = doc.sheetsById[SheetCodes[key]];
-			await sheet.loadCells(PW_CELL);
-			const pw = sheet.getCellByA1(PW_CELL);
-			pwds[pw.value] = key;
-		}
+		const data = rows.slice(-1).map((row) => ({
+			timestamp: row['Timestamp'],
+			dish: row['Dish name'],
+			ingredients: row['What are the ingredients?'],
+			allergens: row['Any allergens?'],
+		}));
 
-		res.status(200).json({ pwds });
+		res.status(200).json({ rows: data });
 	} catch (e) {
 		res.status(404).json({ error: 'Something went wrong' });
 		// eslint-disable-next-line no-console
