@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { useQuery } from 'react-query';
 import { useCallback, useEffect, useState } from 'react';
 import Head from 'next/head';
 import { useDisclosure } from '@chakra-ui/react';
@@ -21,7 +22,8 @@ const Region = {
 
 const getAuthInfo = async () => {
 	try {
-		return await axios.get(`/api/verifyAuthorization`);
+		const response = await axios.get(`/api/verifyAuthorization`);
+		return response?.data?.pwds;
 	} catch (e) {
 		// eslint-disable-next-line no-console
 		console.error(e);
@@ -30,11 +32,13 @@ const getAuthInfo = async () => {
 
 export default function Home() {
 	const [isAuthorized, setIsAuthorized] = useState(false);
-	const [isLoading, setIsLoading] = useState(false);
-	const [passwords, setPasswords] = useState();
 	const [currentPassword, setCurrentPassword] = useLocalStorage('pw');
 	const [region, setRegion] = useState(Region.East);
 	const { isOpen, onOpen, onClose } = useDisclosure();
+	const { isLoading, data: passwords } = useQuery(
+		'getPasswords',
+		getAuthInfo,
+	);
 
 	const verifyPassword = useCallback(
 		(value) => {
@@ -59,14 +63,7 @@ export default function Home() {
 		if (!isAuthorized) {
 			onOpen();
 		}
-		if (!passwords) {
-			setIsLoading(true);
-			getAuthInfo().then((response) => {
-				setPasswords(response?.data?.pwds);
-				setIsLoading(false);
-			});
-		}
-	}, [currentPassword, isAuthorized, onOpen, passwords, verifyPassword]);
+	}, [currentPassword, isAuthorized, onOpen, verifyPassword]);
 
 	useEffect(() => {
 		if (currentPassword?.length === 4 && passwords) {

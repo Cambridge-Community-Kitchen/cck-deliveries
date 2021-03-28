@@ -1,7 +1,10 @@
 import Head from 'next/head';
 import PropTypes from 'prop-types';
+import { QueryClientProvider, QueryClient } from 'react-query';
 import { ChakraProvider } from '@chakra-ui/react';
 import '../styles/globals.css';
+
+const queryClient = new QueryClient();
 
 const App = ({ Component, pageProps }) => (
 	<>
@@ -13,7 +16,9 @@ const App = ({ Component, pageProps }) => (
 			/>
 		</Head>
 		<ChakraProvider>
-			<Component {...pageProps} />
+			<QueryClientProvider client={queryClient}>
+				<Component {...pageProps} />
+			</QueryClientProvider>
 		</ChakraProvider>
 	</>
 );

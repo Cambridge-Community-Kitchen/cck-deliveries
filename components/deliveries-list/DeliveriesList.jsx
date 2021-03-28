@@ -3,13 +3,13 @@ import PropTypes from 'prop-types';
 import React, { useCallback, useEffect, useState } from 'react';
 import { Box, Button, Text } from '@chakra-ui/react';
 import dayjs from 'dayjs';
-const customParseFormat = require('dayjs/plugin/customParseFormat');
 import Item from './item';
 import LoadingSpinner from '../loading-spinner';
 import BackToLockon from '../../components/back-to-lockon';
 import styles from './DeliveriesList.module.scss';
 import { SheetCodes } from '../../config/constants';
 
+const customParseFormat = require('dayjs/plugin/customParseFormat');
 dayjs.extend(customParseFormat);
 
 const Day = {
@@ -116,11 +116,12 @@ const DeliveriesList = ({ onReset, region }) => {
 			const today = dayjs();
 			const parsed = dayjs(timestamp, 'DD/MM/YYYY HH:mm:ss');
 
-			// If timestamp is yesterday or today
+			// If timestamp is in the last 3 days
 			if (
 				(today.date() === parsed.date() ||
 					today.date() === parsed.date() + 1 ||
-					today.date() === parsed.date() + 2) &&
+					today.date() === parsed.date() + 2 ||
+					today.date() === parsed.date() + 3) &&
 				passcode === expectedPasscode
 			) {
 				// Display dish of the day
@@ -157,23 +158,34 @@ const DeliveriesList = ({ onReset, region }) => {
 				</Button>
 			</Box>
 			{displayDish && (
-				<Box ml={2}>
+				<Box
+					border="2px"
+					borderColor="gray.200"
+					borderRadius={5}
+					p={1}
+					m={2}
+				>
 					<Box
 						alignItems="center"
 						display="flex"
 						justifyContent="flex-start"
 					>
-						<Text fontWeight="bold">Dish:</Text>
-						<Text fontSize={14} ml={1}>
+						<Text
+							fontWeight="bold"
+							fontSize={16}
+							textTransform="uppercase"
+						>
 							{dishOfTheDay.dish}
 						</Text>
 					</Box>
 					<Box
-						alignItems="center"
+						alignItems="flex-start"
 						display="flex"
 						justifyContent="flex-start"
 					>
-						<Text fontWeight="bold">Ingredients:</Text>
+						<Text fontSize={14} fontWeight="bold">
+							Ingredients:
+						</Text>
 						<Text fontSize={14} ml={1}>
 							{dishOfTheDay.ingredients}
 						</Text>
@@ -184,7 +196,7 @@ const DeliveriesList = ({ onReset, region }) => {
 						display="flex"
 						justifyContent="flex-start"
 					>
-						<Text color="red.400" fontWeight="bold">
+						<Text color="red.400" fontSize={14} fontWeight="bold">
 							Allergens:
 						</Text>
 						{dishOfTheDay.allergens ? (
