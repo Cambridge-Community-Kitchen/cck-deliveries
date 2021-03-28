@@ -3,11 +3,14 @@ import PropTypes from 'prop-types';
 import React, { useCallback, useEffect, useState } from 'react';
 import { Box, Button, Text } from '@chakra-ui/react';
 import dayjs from 'dayjs';
+const customParseFormat = require('dayjs/plugin/customParseFormat');
 import Item from './item';
 import LoadingSpinner from '../loading-spinner';
 import BackToLockon from '../../components/back-to-lockon';
 import styles from './DeliveriesList.module.scss';
 import { SheetCodes } from '../../config/constants';
+
+dayjs.extend(customParseFormat);
 
 const Day = {
 	Tuesday: 'Tuesday',
@@ -100,6 +103,7 @@ const DeliveriesList = ({ onReset, region }) => {
 	useEffect(() => {
 		if (!dishOfTheDay) {
 			getDishOfTheDay().then((sheetData) => {
+				console.log(sheetData);
 				setDishOfTheDay(sheetData?.data?.rows[0]);
 			});
 		}
@@ -107,15 +111,17 @@ const DeliveriesList = ({ onReset, region }) => {
 
 	useEffect(() => {
 		if (dishOfTheDay) {
-			const { timestamp } = dishOfTheDay;
+			const { timestamp, passcode, expectedPasscode } = dishOfTheDay;
 
-			const today = new Date();
-			const parsed = new Date(timestamp);
+			const today = dayjs();
+			const parsed = dayjs(timestamp, 'DD/MM/YYYY HH:mm:ss');
 
 			// If timestamp is yesterday or today
 			if (
-				today.getDate() === parsed.getDate() ||
-				today.getDate() === parsed.getDate() + 1
+				(today.date() === parsed.date() ||
+					today.date() === parsed.date() + 1 ||
+					today.date() === parsed.date() + 2) &&
+				passcode === expectedPasscode
 			) {
 				// Display dish of the day
 				setDisplayDish(true);

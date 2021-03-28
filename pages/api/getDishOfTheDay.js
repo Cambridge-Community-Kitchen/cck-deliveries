@@ -7,6 +7,8 @@ const { privateKey: PRIVATE_KEY } = JSON.parse(
 	process.env.REACT_APP_GOOGLE_SERVICE_PRIVATE_KEY,
 );
 
+const PW_CELL = 'F2';
+
 export default async (req, res) => {
 	const doc = new GoogleSpreadsheet(SPREADSHEET_ID);
 
@@ -18,6 +20,9 @@ export default async (req, res) => {
 		// loads document properties and worksheets
 		await doc.loadInfo();
 		const sheet = doc.sheetsById[SheetCodes.DishOfTheDay];
+		await sheet.loadCells(PW_CELL);
+		const expectedPasscode = sheet.getCellByA1(PW_CELL).value;
+
 		const rows = await sheet.getRows();
 
 		const data = rows.slice(-1).map((row) => ({
@@ -25,6 +30,8 @@ export default async (req, res) => {
 			dish: row['Dish name'],
 			ingredients: row['What are the ingredients?'],
 			allergens: row['Any allergens?'],
+			passcode: row['Passcode'],
+			expectedPasscode,
 		}));
 
 		res.status(200).json({ rows: data });
