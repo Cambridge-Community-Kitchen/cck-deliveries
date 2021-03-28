@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { useQuery } from 'react-query';
 import PropTypes from 'prop-types';
 import React, { useCallback, useEffect, useState } from 'react';
 import { Box, Button, Text } from '@chakra-ui/react';
@@ -49,7 +50,8 @@ const getSheetData = async (sheetId) => {
 
 const getDishOfTheDay = async () => {
 	try {
-		return await axios.get(`/api/getDishOfTheDay`);
+		const response = await axios.get(`/api/getDishOfTheDay`);
+		return response?.data?.rows[0];
 	} catch (e) {
 		// eslint-disable-next-line no-console
 		console.error(e);
@@ -58,10 +60,11 @@ const getDishOfTheDay = async () => {
 
 const DeliveriesList = ({ onReset, region }) => {
 	const [data, setData] = useState();
-	const [dishOfTheDay, setDishOfTheDay] = useState();
 	const [displayDish, setDisplayDish] = useState(false);
 	const [isLoading, setIsLoading] = useState(true);
 	const { day: nextDay, date } = getNextDay();
+
+	const { data: dishOfTheDay } = useQuery('dishOfTheDay', getDishOfTheDay);
 
 	useEffect(() => {
 		setIsLoading(true);
@@ -99,15 +102,6 @@ const DeliveriesList = ({ onReset, region }) => {
 		(id) => updateItemCompletion(id, false),
 		[updateItemCompletion],
 	);
-
-	useEffect(() => {
-		if (!dishOfTheDay) {
-			getDishOfTheDay().then((sheetData) => {
-				console.log(sheetData);
-				setDishOfTheDay(sheetData?.data?.rows[0]);
-			});
-		}
-	}, [dishOfTheDay]);
 
 	useEffect(() => {
 		if (dishOfTheDay) {
