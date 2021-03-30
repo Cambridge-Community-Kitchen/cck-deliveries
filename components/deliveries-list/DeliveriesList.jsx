@@ -177,11 +177,9 @@ const DeliveriesList = ({ onReset, region }) => {
 						display="flex"
 						justifyContent="flex-start"
 					>
-						<Text fontSize={14} fontWeight="bold">
-							Ingredients:
-						</Text>
-						<Text fontSize={14} ml={1}>
-							{dishOfTheDay.ingredients}
+						<Text fontSize={14}>
+							<span>Ingredients:</span>{' '}
+							<strong>{dishOfTheDay.ingredients}</strong>
 						</Text>
 					</Box>
 
