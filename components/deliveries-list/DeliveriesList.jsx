@@ -108,7 +108,7 @@ const DeliveriesList = ({ onReset, region }) => {
 			const { timestamp, passcode, expectedPasscode } = dishOfTheDay;
 
 			const today = dayjs();
-			const parsed = dayjs(timestamp, 'DD/MM/YYYY HH:mm:ss');
+			const parsed = dayjs(timestamp, 'DD MMM YYYY');
 
 			// If timestamp is in the last 3 days
 			if (
@@ -169,7 +169,7 @@ const DeliveriesList = ({ onReset, region }) => {
 							fontSize={16}
 							textTransform="uppercase"
 						>
-							{dishOfTheDay.dish}
+							{dishOfTheDay?.dish}
 						</Text>
 					</Box>
 					<Box
@@ -179,7 +179,7 @@ const DeliveriesList = ({ onReset, region }) => {
 					>
 						<Text fontSize={14}>
 							<span>Ingredients:</span>{' '}
-							<strong>{dishOfTheDay.ingredients}</strong>
+							<strong>{dishOfTheDay?.ingredients}</strong>
 						</Text>
 					</Box>
 

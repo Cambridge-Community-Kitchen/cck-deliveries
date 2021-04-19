@@ -30,7 +30,9 @@ export default async (req, res) => {
 				name: row.Name,
 				phone: row.Phone,
 				address: row.Address,
-				plusCode: row.PlusCode,
+				plusCode: row.PlusCode.includes('9F42')
+					? row.PlusCode
+					: `9F42${row.PlusCode}`,
 				allergies: row['Allergies?'],
 				deliveries: {
 					Tuesday: row.Tue,
