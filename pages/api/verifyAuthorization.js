@@ -9,7 +9,7 @@ const { privateKey: PRIVATE_KEY } = JSON.parse(
 
 const PW_CELL = 'L18';
 
-export default async (req, res) => {
+export default async function (req, res) {
 	const doc = new GoogleSpreadsheet(SPREADSHEET_ID);
 
 	try {
@@ -26,6 +26,9 @@ export default async (req, res) => {
 			const sheet = doc.sheetsById[SheetCodes[key]];
 			await sheet.loadCells(PW_CELL);
 			const pw = sheet.getCellByA1(PW_CELL);
+
+			if (!pw?.value) continue;
+
 			pwds[pw.value] = key;
 		}
 
@@ -35,4 +38,4 @@ export default async (req, res) => {
 		// eslint-disable-next-line no-console
 		console.error('Error: ', e);
 	}
-};
+}

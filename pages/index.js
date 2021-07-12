@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { useQuery } from 'react-query';
 import { useCallback, useEffect, useState } from 'react';
+import router, { useRouter } from 'next/router';
 import Head from 'next/head';
 import { useDisclosure } from '@chakra-ui/react';
 import useLocalStorage from '../hooks/useLocalStorage.jsx';
@@ -19,7 +20,6 @@ const Region = {
 	Trumpington: 'Trumpington',
 	bikeshops1: 'bike shops 1',
 	bikeshops2: 'bike shops 2',
-	// West: 'West',
 	Demo: 'Demo',
 };
 
@@ -34,6 +34,7 @@ const getAuthInfo = async () => {
 };
 
 export default function Home() {
+	const { query } = useRouter();
 	const [isAuthorized, setIsAuthorized] = useState(false);
 	const [currentPassword, setCurrentPassword] = useLocalStorage('pw');
 	const [region, setRegion] = useState(Region.East);
@@ -41,10 +42,17 @@ export default function Home() {
 	const { isLoading, data: passwords } = useQuery(
 		'getPasswords',
 		getAuthInfo,
+		{
+			refetchOnMount: false,
+			refetchOnWindowFocus: false,
+			keepPreviousData: true,
+		},
 	);
 
 	const verifyPassword = useCallback(
 		(value) => {
+			if (!passwords) return;
+
 			let isPasswordCorrect = false;
 			Object.keys(passwords).map((key) => {
 				if (key.toLowerCase() === value.toLowerCase()) {
@@ -59,38 +67,41 @@ export default function Home() {
 				setCurrentPassword('');
 			}
 		},
-		[onClose, passwords, setCurrentPassword],
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+		[passwords],
 	);
 
 	useEffect(() => {
 		if (!isAuthorized) {
 			onOpen();
 		}
-	}, [currentPassword, isAuthorized, onOpen, verifyPassword]);
+	}, [currentPassword, isAuthorized, onOpen]);
 
 	useEffect(() => {
 		if (currentPassword?.length === 4 && passwords) {
 			verifyPassword(currentPassword);
 		}
-	}, [currentPassword, passwords, verifyPassword]);
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [passwords, verifyPassword]);
 
-	const onPasswordChange = useCallback(
-		(value) => {
-			setCurrentPassword(value);
-		},
-		[setCurrentPassword],
-	);
+	useEffect(() => {
+		if (query.p && passwords) {
+			verifyPassword(query.p);
+		}
+	}, [passwords, query.p, verifyPassword]);
 
-	const onPasswordComplete = useCallback(
-		(value) => {
-			verifyPassword(value);
-		},
-		[verifyPassword],
-	);
+	const onPasswordChange = useCallback((value) => setCurrentPassword(value), [
+		setCurrentPassword,
+	]);
+
+	const onPasswordComplete = useCallback((value) => verifyPassword(value), [
+		verifyPassword,
+	]);
 
 	const onReset = useCallback(() => {
 		setCurrentPassword('');
 		setIsAuthorized(false);
+		router.replace('/');
 	}, [setCurrentPassword]);
 
 	return (

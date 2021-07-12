@@ -8,7 +8,6 @@ export const SheetCodes = {
 	Trumpington: '271355350',
 	'bike shops 1': '318778154',
 	'bike shops 2': '1137226854',
-	// West: '855253552',
 	Demo: '1683354199',
 	DishOfTheDay: '169944562',
 };
