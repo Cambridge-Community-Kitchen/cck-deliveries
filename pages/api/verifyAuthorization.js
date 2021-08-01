@@ -34,8 +34,7 @@ export default async function (req, res) {
 
 		res.status(200).json({ pwds });
 	} catch (e) {
-		res.status(404).json({ error: 'Something went wrong' });
-		// eslint-disable-next-line no-console
+		res.status(400).json({ error: `Something went wrong - ${e}` });
 		console.error('Error: ', e);
 	}
 }

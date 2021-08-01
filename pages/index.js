@@ -1,4 +1,3 @@
-import axios from 'axios';
 import { useQuery } from 'react-query';
 import { useCallback, useEffect, useState } from 'react';
 import router, { useRouter } from 'next/router';
@@ -25,10 +24,15 @@ const Region = {
 
 const getAuthInfo = async () => {
 	try {
-		const response = await axios.get(`/api/verifyAuthorization`);
-		return response?.data?.pwds;
+		const response = await fetch(`/api/verifyAuthorization`);
+		const res = await response.json();
+		if (res?.error) {
+			// TODO: show some kind of error to user
+			console.error(res?.error);
+		} else {
+			return res?.pwds;
+		}
 	} catch (e) {
-		// eslint-disable-next-line no-console
 		console.error(e);
 	}
 };
@@ -44,7 +48,7 @@ export default function Home() {
 		getAuthInfo,
 		{
 			refetchOnMount: false,
-			refetchOnWindowFocus: false,
+			refetchOnWindowFocus: true,
 			keepPreviousData: true,
 		},
 	);

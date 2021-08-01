@@ -36,7 +36,7 @@ export default async (req, res) => {
 
 		res.status(200).json({ rows: data });
 	} catch (e) {
-		res.status(404).json({ error: 'Something went wrong' });
+		res.status(400).json({ error: `Something went wrong - ${e}` });
 		// eslint-disable-next-line no-console
 		console.error('Error: ', e);
 	}

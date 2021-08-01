@@ -1,4 +1,3 @@
-import axios from 'axios';
 import { useQuery } from 'react-query';
 import PropTypes from 'prop-types';
 import React, { useCallback, useEffect, useState } from 'react';
@@ -41,7 +40,14 @@ const getNextDay = () => {
 
 const getSheetData = async (sheetId) => {
 	try {
-		return await axios.get(`/api/getSheetData/${sheetId}`);
+		const response = await fetch(`/api/getSheetData/${sheetId}`);
+		const res = await response.json();
+		if (res?.error) {
+			// TODO: show some kind of error to user
+			console.error(res?.error);
+		} else {
+			return res;
+		}
 	} catch (e) {
 		// eslint-disable-next-line no-console
 		console.error(e);
@@ -50,8 +56,14 @@ const getSheetData = async (sheetId) => {
 
 const getDishOfTheDay = async () => {
 	try {
-		const response = await axios.get(`/api/getDishOfTheDay`);
-		return response?.data?.rows[0];
+		const response = await fetch(`/api/getDishOfTheDay`);
+		const res = await response.json();
+		if (res?.error) {
+			// TODO: show some kind of error to user
+			console.error(res?.error);
+		} else {
+			return res?.rows[0];
+		}
 	} catch (e) {
 		// eslint-disable-next-line no-console
 		console.error(e);
@@ -69,7 +81,7 @@ const DeliveriesList = ({ onReset, region }) => {
 	useEffect(() => {
 		setIsLoading(true);
 		getSheetData(SheetCodes[region]).then((sheetData) => {
-			const cleanData = sheetData?.data?.rows.filter(
+			const cleanData = sheetData?.rows.filter(
 				(row) => row.deliveries[nextDay] > 0,
 			);
 			setData(cleanData);
