@@ -6,8 +6,6 @@ export const SheetCodes = {
 	'South 1': '738737227',
 	'South 2': '1300962922',
 	Trumpington: '271355350',
-	'bike shops 1': '318778154',
-	'bike shops 2': '1137226854',
 	Demo: '1683354199',
 	DishOfTheDay: '169944562',
 };

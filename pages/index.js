@@ -17,8 +17,6 @@ const Region = {
 	South1: 'South 1',
 	South2: 'South 2',
 	Trumpington: 'Trumpington',
-	bikeshops1: 'bike shops 1',
-	bikeshops2: 'bike shops 2',
 	Demo: 'Demo',
 };
 
