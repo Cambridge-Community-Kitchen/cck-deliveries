@@ -10,14 +10,16 @@ import Authorization from '../components/authorization';
 import styles from '../styles/Home.module.css';
 
 const Region = {
-	East: 'East',
-	Central: 'Central',
-	North1: 'North 1',
-	North2: 'North 2',
-	South1: 'South 1',
-	South2: 'South 2',
-	Trumpington: 'Trumpington',
-	Demo: 'Demo',
+    Arbury: 'Arbury',
+    Barnwell: 'Barnwell',
+    CambridgeNorth: 'Cambridge North',
+    CherryHinton: 'Cherry Hinton',
+    Chesterton: 'Chesterton',
+    KingsHedges: 'Kings Hedges',
+    MillRoad: 'Mill Road',
+    QueenEdith: 'Queen Edith',
+    Trumpington: 'Trumpington',
+    Demo: 'Demo',
 };
 
 const getAuthInfo = async () => {
