@@ -41,6 +41,7 @@ export default async (req, res) => {
 				},
 				notes: row.Notes,
 				optimalRoute: parseInt(row['optimal route']),
+				whenNotHome: row['When not home'],
 			}));
 
 		res.status(200).json({ rows: data });
