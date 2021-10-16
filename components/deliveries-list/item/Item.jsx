@@ -86,6 +86,14 @@ const Item = ({ data, markComplete, portions, unmarkComplete }) => {
 					<Text color="red.500" fontSize="sm">
 						{data.allergies}
 					</Text>
+					{data.whenNotHome && (
+						<Text color="gray.500" fontSize="sm">
+							<strong>
+								If no-one's home and you can't make contact:{' '}
+							</strong>
+							{data.whenNotHome}
+						</Text>
+					)}
 
 					<Stack direction="row" mt="4" spacing={3}>
 						<Button
