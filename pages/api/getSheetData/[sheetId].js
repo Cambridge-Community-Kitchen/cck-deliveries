@@ -24,10 +24,10 @@ export default async (req, res) => {
 
 		const data = rows
 			.slice(0, 14)
-			.filter((row) => row.Name && row.Name.length > 0)
+			.filter((row) => row.Address && row.Address.length > 0)
 			.map((row) => ({
 				id: row._rowNumber,
-				name: row.Name,
+				name: row.Name || '[no name]',
 				phone: row.Phone,
 				address: row.Address,
 				plusCode: row.PlusCode.includes('9F42')
