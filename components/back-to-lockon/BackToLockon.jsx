@@ -3,8 +3,8 @@ import { Box, Button } from '@chakra-ui/react';
 import { ArrowForwardIcon } from '@chakra-ui/icons';
 
 const BackToLockon = () => {
-//	const encodedGoogleMapsUrl = `https://goo.gl/maps/TKn359eKxHWskMJV6`; // The Lockon
-	const encodedGoogleMapsUrl = `https://goo.gl/maps/yURo7vxnViPK3ngf7`; // Downing Place
+	const encodedGoogleMapsUrl = `https://goo.gl/maps/TKn359eKxHWskMJV6`; // The Lockon
+//	const encodedGoogleMapsUrl = `https://goo.gl/maps/yURo7vxnViPK3ngf7`; // Downing Place
 	return (
 		<Box d="flex" alignItems="center" justifyContent="center" py={5}>
 			<Button
@@ -15,7 +15,7 @@ const BackToLockon = () => {
 				size="sm"
 				target="_blank"
 			>
-				Back to St Andrew's Street Baptist Church
+				Back to The Lockon
 			</Button>
 		</Box>
 	);
