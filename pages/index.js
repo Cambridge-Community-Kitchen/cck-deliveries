@@ -15,6 +15,7 @@ const Region = {
     CambridgeNorth: 'Cambridge North',
     CherryHinton: 'Cherry Hinton',
     Chesterton: 'Chesterton',
+    HillsRoad: 'Hills Road',
     KingsHedges: 'Kings Hedges',
     MillRoad: 'Mill Road',
     QueenEdith: 'Queen Edith',
