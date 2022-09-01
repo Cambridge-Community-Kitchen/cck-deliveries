@@ -16,6 +16,7 @@ const Region = {
     Castle: 'Castle',
     CherryHinton: 'Cherry Hinton',
     Chesterton: 'Chesterton',
+    Coleridge: 'Coleridge',
     HillsRoad: 'Hills Road',
     KingsHedges: 'Kings Hedges',
     MillRoad: 'Mill Road',
