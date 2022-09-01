@@ -13,6 +13,7 @@ const Region = {
     Arbury: 'Arbury',
     Barnwell: 'Barnwell',
     CambridgeNorth: 'Cambridge North',
+    Castle: 'Castle',
     CherryHinton: 'Cherry Hinton',
     Chesterton: 'Chesterton',
     HillsRoad: 'Hills Road',
